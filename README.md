@@ -39,7 +39,7 @@
 
 ### Desafio #2
  * Ejecuta el script DesafiaDos.php
- *  Realiza las correciones Necesarias en la funcion retriveLotes a fin del que el json que devuelva de la siguiente manera:
+ *  Realiza las correciones Necesarias en la funcion retriveLotes y en la funcion getLotes a fin del que el json que devuelva de la siguiente manera:
 
  [
   {
