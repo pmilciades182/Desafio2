@@ -1,46 +1,38 @@
-<?php 
-
+<?php
 require_once 'Database.php';
 
 class DesafioUno {
 
-
     public static function getClientDebt (int $clientID)
     {
         Database::setDB();
-
         $lotes = self::getLotes();
-         
+
         $cobrar['status']            = true;
         $cobrar['message']           = 'No hay Lotes para cobrar';
         $cobrar['data']['total']     = 0;
         $cobrar['data']['detail']    = [];
 
-
-
         foreach($lotes as $lote){
 
-        
-            if($lote->vencimiento || $lote->vencimiento > date('Y-m-d')) continue;
+            // se omiten registros sin fecha
+            if(  $lote->vencimiento === null ) continue;
 
 
-            if($lote->client_ID !== $clientID) continue;
-            
+            // se ajusta la fecha segun el requerimiento del desafio
+            if( strtotime($lote->vencimiento) < strtotime('2022-11-30')) continue;
 
-            
-            $cobrar['status']             = false;
+
+            $cobrar['status']             = true;
             $cobrar['message']            = 'Tienes Lotes para cobrar';
-            $cobrar['data']['total']     += $lote->monto;
+            $cobrar['data']['total']     += $lote->precio;
             $cobrar['data']['detail'][]   = (array) $lote;
- 
         }
 
         echo(json_encode($cobrar));
     }
 
-    
-
-    private static function getLotes() : array 
+    private static function getLotes() : array
     {
         $lotes = [];
         $cnx = Database::getConnection();
@@ -51,9 +43,6 @@ class DesafioUno {
         }
         return $lotes;
     }
-
-
-
 }
 
 DesafioUno::getClientDebt(123456);
